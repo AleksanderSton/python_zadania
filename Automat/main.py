@@ -17,8 +17,12 @@ def process_input_from_file(file_path):
         k = int(lines[2].strip().split(": ")[1])
     return rule, n, k
 
-file_path = input("enter the path to Your .cfg file ")
-rule, n, k = process_input_from_file(file_path)
+
+#file_path = input("enter the path to Your .cfg file ")
+#rule, n, k = process_input_from_file(file_path)
+rule = '01011010'
+n = 30
+k = 100
 
 dictionary = {'***': rule[0],
               '**_': rule[1],
@@ -39,8 +43,10 @@ for i in range(k):
         result += '*'
     elif value == 0:
         result += '_'
+    print(result)
 if k < n:
     for i in range(n - k):
         result += '_'
-print(rand_str)
-print(result)
+        print(result)
+#print(rand_str)
+#(result)
