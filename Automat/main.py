@@ -1,52 +1,42 @@
-import random
+def set_rule(rule):
+    return {
+        "***": '*' if rule[0] == '1' else '_',
+        "**_": '*' if rule[1] == '1' else '_',
+        "*_*": '*' if rule[2] == '1' else '_',
+        "*__": '*' if rule[3] == '1' else '_',
+        "_**": '*' if rule[4] == '1' else '_',
+        "_*_": '*' if rule[5] == '1' else '_',
+        "__*": '*' if rule[6] == '1' else '_',
+        "___": '*' if rule[7] == '1' else '_'
+    }
 
 
-def random_string(length):
-    result = ''
-    for i in range(length):
-        rand = random.choice(['*', '_'])
-        result += rand
-    return result
+def triangle(n):
+    return "_" * (n // 2) + "*" + "_" * (n // 2)
 
 
-def process_input_from_file(file_path):
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
-        rule = lines[0].strip().split(": ")[1]
-        n = int(lines[1].strip().split(": ")[1])
-        k = int(lines[2].strip().split(": ")[1])
-    return rule, n, k
+def new_automat(rule, n):
+    rule_dict = set_rule(rule)
+    return {pattern: rule_dict[pattern] for pattern in rule_dict}, triangle(n)
 
 
-#file_path = input("enter the path to Your .cfg file ")
-#rule, n, k = process_input_from_file(file_path)
+def run_automat(automat, k):
+    cells = automat[1]
+    for _ in range(k):
+        print(cells)
+        next_cells = ""
+        for i in range(len(cells)):
+            left = cells[i - 1]
+            center = cells[i]
+            right = cells[(i + 1) % len(cells)]
+            pattern = left + center + right
+            next_cells += automat[0].get(pattern, "_")
+        cells = next_cells
+
+
 rule = '01011010'
-n = 30
-k = 100
+n = 78
+k = 90
 
-dictionary = {'***': rule[0],
-              '**_': rule[1],
-              '*_*': rule[2],
-              '*__': rule[3],
-              '_**': rule[4],
-              '_*_': rule[5],
-              '__*': rule[6],
-              '___': rule[7]}
-
-rand_str = random_string(n)
-result = ''
-print(dictionary)
-for i in range(k):
-    temp = rand_str[i % n] + rand_str[(i + 1) % n] + rand_str[(i + 2) % n]
-    value = int(dictionary.get(temp))
-    if value == 1:
-        result += '*'
-    elif value == 0:
-        result += '_'
-    print(result)
-if k < n:
-    for i in range(n - k):
-        result += '_'
-        print(result)
-#print(rand_str)
-#(result)
+automat = new_automat(rule, n)
+run_automat(automat, k)
